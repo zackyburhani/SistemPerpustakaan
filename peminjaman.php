@@ -1,0 +1,507 @@
+<?php 
+include 'template/Header.php'; 
+include 'template/Sidebar.php';
+include_once("Database/koneksi.php");
+?>
+
+<?php
+
+//autonumber
+$cariindex = mysqli_query($koneksi,"select max(no_peminjaman) from tb_peminjaman") or die(mysqli_error());
+$dataindex = mysqli_fetch_array($cariindex);
+if($dataindex){
+    $nilaiindex = substr($dataindex[0],3);
+    $index = (int) $nilaiindex;
+    $index = $index + 1;
+    $hasilindex = "201".str_pad($index,4,"0",STR_PAD_LEFT);
+
+} else {
+    $hasilindex = "2010001";}
+
+
+//insert detil
+if(isset($_POST['detil'])) {
+  $no_copy = $_POST['no_copy'];
+  $jml_pinjam = $_POST['jml_pinjam'];
+
+  $cari = mysqli_query($koneksi, "SELECT no_copy,jml_pinjam from detil_pinjam WHERE no_copy = '$no_copy' and no_peminjaman is null");  
+  $nomor_copy = mysqli_fetch_assoc($cari);
+  if($no_copy == $nomor_copy['no_copy']){
+    $total = $jml_pinjam+$nomor_copy['jml_pinjam'];
+    $result = mysqli_query($koneksi, "UPDATE detil_pinjam set jml_pinjam = '$total' WHERE no_copy = '$no_copy' and no_peminjaman is null");
+  } else {
+    $result = mysqli_query($koneksi, "INSERT INTO detil_pinjam(no_copy,jml_pinjam) VALUES('$no_copy','$jml_pinjam')");
+  }
+  if($result){
+    echo "<script type='text/javascript'>
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>"; 
+  } else {
+    echo "<script type='text/javascript'>
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>";
+  }
+
+}
+
+//hapus detil
+if(isset($_POST['hapusDetil'])) {
+  $no_copy = $_POST['no_copy'];
+
+  $result = mysqli_query($koneksi, "DELETE FROM detil_pinjam WHERE no_copy = $no_copy AND no_peminjaman is null");
+  if($result){
+    // echo "<script type='text/javascript'>
+    //         window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+    //       </script>"; 
+  } else {
+    echo "<script type='text/javascript'>
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>";
+  }
+
+}
+
+//hapus semua detil
+if(isset($_POST['hapusSemua'])) {
+  $result = mysqli_query($koneksi, "DELETE FROM detil_pinjam WHERE no_peminjaman is null");
+  if(!$result){
+    echo "<script type='text/javascript'>
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>";
+  }
+
+}
+
+//insert
+if(isset($_POST['submit'])) {
+  $no_anggota = $_POST['no_anggota'];
+  $no_peminjaman = $_POST['no_peminjaman'];
+  $tgl_pinjam = $_POST['tgl_pinjam'];
+
+  $result = mysqli_query($koneksi, "SELECT COUNT(*) as baris FROM detil_pinjam WHERE no_peminjaman is null");
+  $baris = mysqli_fetch_assoc($result);
+
+  $date = date('Y-m-d');
+  if($tgl_pinjam < $date){
+    echo "<script type='text/javascript'>
+            alert ('Tanggal Tidak Valid !');
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>";
+  }
+
+  $result = mysqli_query($koneksi, "SELECT no_anggota FROM tb_anggota");
+  $anggota = mysqli_fetch_assoc($result);
+
+  if($anggota['no_anggota'] != $no_anggota){
+    echo "<script type='text/javascript'>
+            alert ('Data Tidak Ditemukan !');
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>";
+  }
+
+  $result = mysqli_query($koneksi, "SELECT * FROM detil_pinjam WHERE no_peminjaman is null");
+
+  $tampung = array();
+  while($row = mysqli_fetch_array($result)){
+    $tampung[] = $row['no_copy'];
+  }
+
+  for($i=0; $i<$baris['baris']; $i++){
+    $tes = $tampung[$i]; 
+    $update = mysqli_query($koneksi, "UPDATE detil_pinjam set no_peminjaman = '$no_peminjaman' WHERE no_copy = '$tes'"); 
+  }
+
+  $result = mysqli_query($koneksi, "INSERT INTO tb_peminjaman(no_peminjaman,no_anggota,tgl_pinjam) VALUES('$no_peminjaman','$no_anggota','$tgl_pinjam')");
+    
+  if($result){
+    echo "<script type='text/javascript'>
+            alert ('Data Berhasil Disimpan !');
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>"; 
+  } else {
+    echo "<script type='text/javascript'>
+            alert ('Data Gagal Disimpan !');
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+          </script>";
+  }
+}
+
+//update
+if(isset($_POST['update'])) {
+  $no_buku = $_POST['no_buku'];
+  $copy_buku = $_POST['no_copy'];
+  
+  $result = mysqli_query($koneksi, "UPDATE tb_copybuku SET no_buku = '$no_buku' WHERE no_copy = $copy_buku");
+    
+  if($result){
+  echo "<script type='text/javascript'>
+            alert ('Data Berhasil Disimpan !');
+            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+          </script>"; 
+  } else {
+    echo "<script type='text/javascript'>
+            alert ('Data Gagal Disimpan !');
+            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+          </script>";
+  }
+}
+
+?>
+
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>
+      <small><b>Halaman Data Peminjaman</b></small>
+    </h1>
+  </section>
+<section class="content">
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <form method="POST" action="peminjaman.php">
+            <div class="col-xs-3">
+              <label style="margin-top: 5px">Cek Status Peminjaman</label>  
+            </div>
+            <div class="col-md-6">
+              <input type="text" name="no_anggota" class="form-control">
+            </div>
+            <div class="col-md-1">
+              <button type="submit" name="cari" class="btn btn-success"><i class="fa fa-search"></i></button>
+            </div>
+          </form>
+        </div>
+      </div>
+     </div>
+    </div>
+  </div>
+
+  <?php 
+  //cari
+  if(isset($_POST['cari'])) {
+    $no_anggota = $_POST['no_anggota'];
+    $result5 = mysqli_query($koneksi, "SELECT * FROM tb_anggota,tb_peminjaman WHERE tb_peminjaman.no_anggota = tb_anggota.no_anggota and tb_anggota.no_anggota = $no_anggota");
+  ?>
+  <div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <?php $hasil = mysqli_fetch_assoc($result5); ?>
+          <div class="col-md-6">
+            <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
+              <tbody>
+                <tr>
+                  <td width="150">Nomor Anggota</td>
+                  <td width="20">:</td>
+                  <td><?php echo $hasil['no_anggota'] ?></td>
+                </tr>
+                <tr>
+                  <td>Nama Anggota</td>
+                  <td>:</td>
+                  <td><?php echo $hasil['nama_anggota'] ?></td>
+                </tr>
+                <tr>
+                  <td>Jabatan</td>
+                  <td>:</td>
+                  <td><?php echo $hasil['jabatan'] ?></td>
+                </tr>
+                <tr>
+                  <td>Nomor Telepon</td>
+                  <td>:</td>
+                  <td><?php echo $hasil['no_telp'] ?></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
+              <tbody>
+                <tr>
+                  <td width="150">Nomor Peminjaman</td>
+                  <td width="20">:</td>
+                  <td><?php echo $hasil['no_peminjaman'] ?></td>
+                </tr>
+                <tr>
+                  <td>Tanggal Pinjam</td>
+                  <td>:</td>
+                  <td><?php echo $hasil['tgl_pinjam'] ?></td>
+                </tr>
+              </tbody>
+            </table>
+            <a href="peminjaman.php" class="btn pull-right col-md-3 btn-danger"><i class="fa fa-close"></i> Batal</a>
+          </div>
+        </div>
+      </div>
+     </div>
+    </div>
+  </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>
+          <i class="fa fa-tag"></i>
+          <span> Tambah Pinjaman</span>
+       </strong>
+      </div>
+      <div class="panel-body">
+        <form method="POST" action="peminjaman.php">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-1">
+                <label class="control-label">Buku</label>
+              </div>
+              <div class="col-md-4">
+                <select class="form-control" name="no_copy">
+                  <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_copybuku ORDER BY no_copy asc"); ?>
+                  <?php while($buku = mysqli_fetch_array($result)) { ?>
+                  <option value="<?php echo $buku['no_copy'] ?>"><?php echo $buku['no_copy'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="col-md-1">
+                <label class="control-label">Jumlah</label>
+              </div>
+              <div class="col-md-3">
+                <input type="number" name="jml_pinjam" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" min="1" required class="form-control">
+              </div>
+              <div class="col-md-3">
+                <button type="submit" name="detil" class="btn btn-success btn-md btn-block" ><span class="fa fa-plus"></span> Tambah Buku</button>
+              </div>
+            </div>
+          </div>
+          <hr>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<?php } ?>
+
+<?php $result = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_buku,tb_copybuku WHERE tb_copybuku.no_copy = detil_pinjam.no_copy AND tb_buku.no_buku = tb_copybuku.no_buku AND no_peminjaman is null"); ?>
+<?php $data = mysqli_fetch_array($result); ?> 
+<?php if(isset($data)){ ?>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>
+          <i class="fa fa-tag"></i>
+          <span> Tambah Pinjaman</span>
+       </strong>
+      </div>
+      <div class="panel-body">
+        <form method="POST" action="peminjaman.php">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-1">
+                <label class="control-label">Buku</label>
+              </div>
+              <div class="col-md-4">
+                <select class="form-control" name="no_copy">
+                  <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_copybuku ORDER BY no_copy asc"); ?>
+                  <?php while($buku = mysqli_fetch_array($result)) { ?>
+                  <option value="<?php echo $buku['no_copy'] ?>"><?php echo $buku['no_copy'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="col-md-1">
+                <label class="control-label">Jumlah</label>
+              </div>
+              <div class="col-md-3">
+                <input type="number" name="jml_pinjam" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" min="1" required class="form-control">
+              </div>
+              <div class="col-md-3">
+                <button type="submit" name="detil" class="btn btn-success btn-md btn-block" ><span class="fa fa-plus"></span> Tambah Buku</button>
+              </div>
+            </div>
+          </div>
+          <hr>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <label>Detail Peminjaman</label>
+      </div>
+      <div class="panel-body">
+        <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th align="center" width="50px">No. </th>
+              <th align="center"><center>Nomor Copy</center></th>
+              <th align="center"><center>Nomor Buku</center></th>
+              <th align="center"><center>Judul Buku</center></th>
+              <th align="center"><center>Jumlah</center></th>
+              <th align="center"><center>Hapus</center></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php $no=1; ?>
+            <?php $result = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_buku,tb_copybuku WHERE tb_copybuku.no_copy = detil_pinjam.no_copy AND tb_buku.no_buku = tb_copybuku.no_buku AND no_peminjaman is null"); ?>
+            <?php while($data = mysqli_fetch_array($result)) { ?>
+            <tr>
+              <td><center><?php echo $no++; ?></center></td>
+              <td><center><?php echo $data['no_copy'] ?></center></td>
+              <td><center><?php echo $data['no_buku'] ?></center></td>
+              <td><center><?php echo $data['judul_buku'] ?></center></td>
+              <td><center><?php echo $data['jml_pinjam'] ?></center></td>
+              <form method="POST" action="peminjaman.php">
+              <input type="hidden" name="no_copy" value="<?php echo $data['no_copy'] ?>">
+              <td><center><button type="submit" name="hapusDetil" class="btn btn-danger"><i class="fa fa-trash"></i></button></center></td>
+              </form>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-4"></div>
+          <div class="col-md-3">
+            <form method="post" action="peminjaman.php">
+            <button type="submit" name="hapusSemua" class="btn btn-danger btn-md btn-block" ><span class="fa fa-close"></span> Batal</button>
+            </form>
+          </div>
+          <div class="col-md-3">
+            <button type="button" data-target="#ModalEntryPeminjaman" data-toggle="modal" class="btn btn-primary btn-md btn-block" ><span class="fa fa-sign-out"></span> Proses Peminjaman</button>
+          </div>
+        </div>
+      </div>
+     </div>
+    </div>
+  </div>
+<?php } ?>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <label>Daftar Peminjaman</label>
+      </div>
+      <div class="panel-body">
+        <table style="table-layout:fixed" class="table table-striped table-bordered table-hover" id="anggota">
+          <thead>
+            <tr>
+              <th align="center" width="20px">No. </th>
+              <th align="center"><center>Nomor Peminjaman</center></th>
+              <th align="center"><center>Nomor anggota</center></th>
+              <th align="center"><center>Nama Pinjam</center> </th>
+              <th align="center"><center>Tanggal Pinjam</center> </th>
+              <th align="center"><center>Detail</center></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php $no=1; ?>
+            <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_peminjaman,tb_anggota WHERE tb_anggota.no_anggota = tb_peminjaman.no_anggota order by no_peminjaman desc"); ?>
+            <?php while($data2 = mysqli_fetch_array($result)) { ?>
+            <tr>
+              <td><center><?php echo $no++ ?></center></td>
+              <td><center><?php echo $data2['no_peminjaman'] ?></center></td>
+              <td><center><?php echo $data2['no_anggota'] ?></center></td>
+              <td><center><?php echo $data2['nama_anggota'] ?></center></td>
+              <td><center><?php echo $data2['tgl_pinjam'] ?></center></td>
+              <td><center><a data-toggle="modal" href="#detail<?php echo $data2['no_peminjaman'] ?>" class="btn btn btn-primary"><i class="fa fa-folder-open"></i></a></center></td>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+     </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<?php $result2 = mysqli_query($koneksi, "SELECT * FROM tb_peminjaman order by no_peminjaman desc"); ?>
+<?php while($data3 = mysqli_fetch_array($result2)) { ?>
+<div class="modal fade" id="detail<?php echo $data3['no_peminjaman'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Nomor Peminjaman <b><?php echo $data3['no_peminjaman'] ?></b></h4>
+      </div>
+      <div class="modal-body">
+         <table style="table-layout:fixed" class="table table-striped table-bordered table-hover" id="anggota">
+          <thead>
+            <tr>
+              <th align="center" width="20px">No. </th>
+              <th align="center"><center>Nomor Copy Buku</center></th>
+              <th align="center"><center>Judul Buku</center></th>
+              <th align="center"><center>Tanggal Pinjam</center> </th>
+              <th align="center"><center>Jumlah Pinjam</center></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php $no=1; ?>
+            <?php $result4 = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_anggota,tb_peminjaman,tb_copybuku,tb_buku WHERE detil_pinjam.no_copy = tb_copybuku.no_copy and tb_buku.no_buku = tb_copybuku.no_buku and tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman and tb_peminjaman.no_anggota = tb_anggota.no_anggota order by detil_pinjam.no_peminjaman asc"); ?>
+            <?php while($data2 = mysqli_fetch_array($result4)) { ?>
+            <tr>
+              <td><center><?php echo $no++ ?></center></td>
+              <td><center><?php echo $data2['no_copy'] ?></center></td>
+              <td><center><?php echo $data2['judul_buku'] ?></center></td>
+              <td><center><?php echo $data2['tgl_pinjam'] ?></center></td>
+              <td><center><?php echo $data2['jml_pinjam'] ?></center></td>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<?php } ?>
+
+
+
+
+<div class="modal fade" id="ModalEntryPeminjaman" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Input Data Peminjaman</h4>
+      </div>
+      <form method="POST" action="peminjaman.php" enctype="multipart/form-data">
+        <div class="modal-body">
+          
+          <div class="form-group"><label>Nomor Peminjaman</label>
+            <input required class="form-control required text-capitalize" value="<?php echo $hasilindex ?>" readonly data-placement="top" placeholder="Input Nomor Buku" data-trigger="manual" type="text" name="no_peminjaman">
+          </div>
+
+          <div class="form-group"><label>Nomor Anggota</label>
+            <input required class="form-control required text-capitalize" data-placement="top" placeholder="Input Nomor Buku" data-trigger="manual" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="no_anggota">
+          </div>
+
+          <div class="form-group"><label>Tanggal Pinjam</label>
+            <input required class="form-control required text-capitalize" data-placement="top" placeholder="Input Nomor Buku" data-trigger="manual" type="date" name="tgl_pinjam">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Batal</button>
+          <button type="submit" name="submit" class="btn btn-success"><i class="fa fa-save"></i> Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<?php include "template/Footer.php"; ?>
