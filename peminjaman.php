@@ -77,6 +77,7 @@ if(isset($_POST['submit'])) {
   $no_anggota = $_POST['no_anggota'];
   $no_peminjaman = $_POST['no_peminjaman'];
   $tgl_pinjam = $_POST['tgl_pinjam'];
+  $status = '0';
 
   $result = mysqli_query($koneksi, "SELECT COUNT(*) as baris FROM detil_pinjam WHERE no_peminjaman is null");
   $baris = mysqli_fetch_assoc($result);
@@ -101,19 +102,19 @@ if(isset($_POST['submit'])) {
 
   $result = mysqli_query($koneksi, "SELECT * FROM detil_pinjam WHERE no_peminjaman is null");
 
+  $result5 = mysqli_query($koneksi, "INSERT INTO tb_peminjaman(no_peminjaman,no_anggota,tgl_pinjam,status) VALUES('$no_peminjaman','$no_anggota','$tgl_pinjam','$status')");
+
   $tampung = array();
   while($row = mysqli_fetch_array($result)){
     $tampung[] = $row['no_copy'];
   }
 
-  $result = mysqli_query($koneksi, "INSERT INTO tb_peminjaman(no_peminjaman,no_anggota,tgl_pinjam) VALUES('$no_peminjaman','$no_anggota','$tgl_pinjam')");
-
   for($i=0; $i<$baris['baris']; $i++){
     $tes = $tampung[$i]; 
-    $update = mysqli_query($koneksi, "UPDATE detil_pinjam set no_peminjaman = '$no_peminjaman' WHERE no_copy = '$tes' AND no_peminjaman is null"); 
+    $update = mysqli_query($koneksi, "UPDATE detil_pinjam set no_peminjaman = '$no_peminjaman' WHERE no_copy = '$tes' and no_peminjaman is null"); 
   }
     
-  if($result){
+  if($result5 && $update){
     echo "<script type='text/javascript'>
             alert ('Data Berhasil Disimpan !');
             window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
@@ -201,6 +202,7 @@ if(isset($_POST['update'])) {
 <?php $result = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_buku,tb_copybuku WHERE tb_copybuku.no_copy = detil_pinjam.no_copy AND tb_buku.no_buku = tb_copybuku.no_buku AND no_peminjaman is null"); ?>
 <?php $data = mysqli_fetch_array($result); ?> 
 <?php if(isset($data)){ ?>
+
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-default">
@@ -277,19 +279,7 @@ if(isset($_POST['update'])) {
           </thead>
           <tbody>
             <?php $no=1; ?>
-            <?php 
-
-            $result = mysqli_query($koneksi, "SELECT * FROM tb_peminjaman,tb_anggota WHERE tb_anggota.no_anggota = tb_peminjaman.no_anggota order by no_peminjaman desc");
-
-            $cek = mysqli_fetch_assoc($result);
-            $no_peminjamans = $cek['no_peminjaman'];
-
-            $result2 = mysqli_query($koneksi, "SELECT no_peminjaman FROM tb_pengembalian WHERE no_peminjaman = '$no_peminjamans'");
-
-            $validasi = mysqli_fetch_assoc($result2);
-            if($validasi == null){
-            ?>
-            <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_peminjaman,tb_anggota WHERE tb_anggota.no_anggota = tb_peminjaman.no_anggota order by no_peminjaman desc"); ?>
+            <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_peminjaman,tb_anggota WHERE tb_anggota.no_anggota = tb_peminjaman.no_anggota and status = '0' order by no_peminjaman desc"); ?>
             <?php while($data2 = mysqli_fetch_array($result)) { ?>
             <tr>
               <td><center><?php echo $no++ ?></center></td>
@@ -299,7 +289,6 @@ if(isset($_POST['update'])) {
               <td><center><?php echo $data2['tgl_pinjam'] ?></center></td>
               <td><center><a data-toggle="modal" href="#detail<?php echo $data2['no_peminjaman'] ?>" class="btn btn btn-primary"><i class="fa fa-folder-open"></i></a></center></td>
             </tr>
-            <?php } ?>
             <?php } ?>
           </tbody>
         </table>
@@ -332,8 +321,8 @@ if(isset($_POST['update'])) {
           </thead>
           <tbody>
             <?php $no=1; ?>
-            <?php $f = $data3['no_peminjaman']; ?>
-            <?php $result4 = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_anggota,tb_peminjaman,tb_copybuku,tb_buku WHERE detil_pinjam.no_copy = tb_copybuku.no_copy and tb_buku.no_buku = tb_copybuku.no_buku and tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman and tb_peminjaman.no_anggota = tb_anggota.no_anggota and detil_pinjam.no_peminjaman = '$f' order by detil_pinjam.no_peminjaman asc"); ?>
+            <?php $z = $data3['no_peminjaman']; ?>
+            <?php $result4 = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_anggota,tb_peminjaman,tb_copybuku,tb_buku WHERE detil_pinjam.no_copy = tb_copybuku.no_copy and tb_buku.no_buku = tb_copybuku.no_buku and tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman and tb_peminjaman.no_anggota = tb_anggota.no_anggota and tb_peminjaman.no_peminjaman = '$z' order by detil_pinjam.no_peminjaman asc"); ?>
             <?php while($data2 = mysqli_fetch_array($result4)) { ?>
             <tr>
               <td><center><?php echo $no++ ?></center></td>

@@ -1,6 +1,6 @@
 <?php 
 include 'template/Header.php'; 
-// include 'template/Sidebar.php';
+include 'template/Sidebar.php';
 include_once("Database/koneksi.php");
 error_reporting(0);
 ?>

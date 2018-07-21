@@ -77,7 +77,7 @@ if(isset($_POST['ganti'])) {
           </thead>
           <tbody>
             <?php $no=1; ?>
-            <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_hilang order by no_peminjaman desc"); ?>
+            <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_hilang order by no_hilang desc"); ?>
             <?php while($data2 = mysqli_fetch_array($result)) { ?>
             <tr>
               <td><center><?php echo $no++ ?></center></td>
@@ -91,7 +91,7 @@ if(isset($_POST['ganti'])) {
               <?php $validasi = mysqli_fetch_assoc($result3); ?>
 
               <?php if($validasi['no_ganti'] == null) { ?>
-                <td><center><a data-toggle="modal" href="#proses<?php echo $data2['no_peminjaman'] ?>" class="btn btn-primary"><i class="fa fa-gears"></i></a></center></td>
+                <td><center><a data-toggle="modal" href="#proses<?php echo $data2['no_hilang'] ?>" class="btn btn-primary"><i class="fa fa-gears"></i></a></center></td>
               <?php } else { ?>
                 <td><center><b>-</b></center></td>
               <?php } ?>
@@ -106,9 +106,9 @@ if(isset($_POST['ganti'])) {
 </section>
 </div>
 
-<?php $result2 = mysqli_query($koneksi, "SELECT * FROM tb_hilang order by no_peminjaman desc"); ?>
+<?php $result2 = mysqli_query($koneksi, "SELECT * FROM tb_hilang order by no_hilang desc"); ?>
 <?php while($data3 = mysqli_fetch_array($result2)) { ?>
-<div class="modal fade" id="proses<?php echo $data3['no_peminjaman'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="proses<?php echo $data3['no_hilang'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -140,17 +140,17 @@ if(isset($_POST['ganti'])) {
 </div>
 <?php } ?>
 
-<?php $result2 = mysqli_query($koneksi, "SELECT * FROM tb_hilang order by no_peminjaman desc"); ?>
+<?php $result2 = mysqli_query($koneksi, "SELECT * FROM tb_hilang order by no_hilang desc"); ?>
 <?php while($data3 = mysqli_fetch_array($result2)) { ?>
 <div class="modal fade" id="detail<?php echo $data3['no_peminjaman'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Detail Peminjam</b></h4>
+          <h4 class="modal-title" id="myModalLabel">Detail Buku Hilang</b></h4>
       </div>
-      <?php $id = $data3['no_peminjaman']; ?>
-      <?php $result1 = mysqli_query($koneksi, "SELECT * FROM tb_copybuku,tb_buku,detil_pinjam,tb_anggota,tb_peminjaman WHERE tb_copybuku.no_buku = tb_buku.no_buku AND detil_pinjam.no_copy = tb_copybuku.no_copy AND tb_anggota.no_anggota = tb_peminjaman.no_anggota AND tb_peminjaman.no_peminjaman = '$id'"); $data_a = mysqli_fetch_array($result1) ?>
+      <?php $id = $data3['no_hilang']; ?>
+      <?php $result1 = mysqli_query($koneksi, "SELECT * FROM tb_hilang,tb_peminjaman,detil_hilang,tb_anggota,tb_copybuku,tb_buku WHERE tb_hilang.no_peminjaman = tb_peminjaman.no_peminjaman AND detil_hilang.no_peminjaman = tb_peminjaman.no_peminjaman AND tb_anggota.no_anggota = tb_peminjaman.no_anggota AND tb_copybuku.no_copy = detil_hilang.no_copy AND tb_buku.no_buku = tb_copybuku.no_buku AND tb_hilang.no_hilang = '$id'"); $data_a = mysqli_fetch_array($result1) ?>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6">
@@ -169,6 +169,22 @@ if(isset($_POST['ganti'])) {
               </tbody>
             </table>
           </div>
+          <div class="col-md-6">
+            <table style="table-layout:fixed" class="table table-bordered">
+              <tbody>
+                <tr>
+                  <td width="150">Nomor Hilang</td>
+                  <td width="20">:</td>
+                  <td><?php echo $data_a['no_hilang'] ?></td>
+                </tr>
+                <tr>
+                  <td width="150">Nomor Peminjaman</td>
+                  <td width="20">:</td>
+                  <td><?php echo $data_a['no_peminjaman'] ?></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
          <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
@@ -178,20 +194,20 @@ if(isset($_POST['ganti'])) {
               <th align="center"><center>Nomor Copy</center></th>
               <th align="center"><center>Judul Buku</center></th>
               <th align="center"><center>Tanggal Pinjam</center> </th>
-              <th align="center"><center>Jumlah Pinjam</center> </th>
+              <th align="center"><center>Jumlah Ganti</center> </th>
             </tr>
           </thead>
           <tbody>
             <?php $no=1; ?>
-            <?php $id = $data3['no_peminjaman']; ?>
-            <?php $result4 = mysqli_query($koneksi, "SELECT * FROM tb_copybuku,tb_buku,detil_pinjam,tb_anggota,tb_peminjaman WHERE tb_copybuku.no_buku = tb_buku.no_buku AND detil_pinjam.no_copy = tb_copybuku.no_copy AND tb_anggota.no_anggota = tb_peminjaman.no_anggota AND tb_peminjaman.no_peminjaman = '$id'"); ?>
+            <?php $id = $data3['no_hilang']; ?>
+            <?php $result4 = mysqli_query($koneksi, "SELECT * FROM tb_hilang,tb_peminjaman,detil_hilang,tb_anggota,tb_copybuku,tb_buku WHERE tb_hilang.no_peminjaman = tb_peminjaman.no_peminjaman AND detil_hilang.no_peminjaman = tb_peminjaman.no_peminjaman AND tb_anggota.no_anggota = tb_peminjaman.no_anggota AND tb_copybuku.no_copy = detil_hilang.no_copy AND tb_buku.no_buku = tb_copybuku.no_buku AND tb_hilang.no_hilang = '$id'"); ?>
             <?php while($data2 = mysqli_fetch_array($result4)) { ?>
             <tr>
               <td><center><?php echo $no++ ?></center></td>
               <td><center><?php echo $data2['no_copy'] ?></center></td>
               <td><center><?php echo $data2['judul_buku'] ?></center></td>
               <td><center><?php echo $data2['tgl_pinjam'] ?></center></td>
-              <td><center><?php echo $data2['jml_pinjam'] ?></center></td>
+              <td><center><?php echo $data2['jml_hilang'] ?></center></td>
             </tr>
             <?php } ?>
           </tbody>

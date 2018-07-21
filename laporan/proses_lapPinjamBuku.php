@@ -40,7 +40,7 @@ $pdf->Cell(1.5,0.5,'Jumlah',1,1,'C');
 
 
 $pdf->SetFont('Tahoma','',9);
-$query = mysqli_query($koneksi,"SELECT tb_peminjaman.no_peminjaman,nama_anggota,tgl_pinjam,judul_buku,jml_pinjam FROM tb_peminjaman,tb_anggota,tb_copybuku,tb_buku,detil_pinjam WHERE tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman AND tb_peminjaman.no_anggota = tb_anggota.no_anggota and tb_copybuku.no_buku = tb_buku.no_buku AND detil_pinjam.no_copy = tb_copybuku.no_copy AND tb_peminjaman.tgl_pinjam BETWEEN '$Dari' AND '$Sampai' ORDER BY tb_peminjaman.tgl_pinjam asc");
+$query = mysqli_query($koneksi,"SELECT tb_peminjaman.no_peminjaman,nama_anggota,tgl_pinjam,judul_buku,jml_pinjam FROM tb_peminjaman,tb_anggota,tb_copybuku,tb_buku,detil_pinjam WHERE tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman AND tb_peminjaman.no_anggota = tb_anggota.no_anggota and tb_copybuku.no_buku = tb_buku.no_buku AND detil_pinjam.no_copy = tb_copybuku.no_copy AND status = '0' AND detil_pinjam.no_peminjaman is not null AND tb_peminjaman.tgl_pinjam BETWEEN '$Dari' AND '$Sampai' ORDER BY tb_peminjaman.tgl_pinjam asc");
 while ($row = mysqli_fetch_array($query)){
   $pdf->Cell(3,0.5,$row['no_peminjaman'],1,0,'C');
   $pdf->Cell(5,0.5,$row['nama_anggota'],1,0);
@@ -50,7 +50,7 @@ while ($row = mysqli_fetch_array($query)){
 }
 
 
-   $query = mysqli_query($koneksi,"select sum(jml_pinjam) as total FROM detil_pinjam,tb_peminjaman WHERE tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman AND tb_peminjaman.tgl_pinjam BETWEEN '$Dari' AND '$Sampai' ORDER BY tb_peminjaman.tgl_pinjam asc");
+   $query = mysqli_query($koneksi,"SELECT sum(jml_pinjam) as total FROM detil_pinjam,tb_peminjaman WHERE tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman AND status = '0' AND tb_peminjaman.tgl_pinjam BETWEEN '$Dari' AND '$Sampai' ORDER BY tb_peminjaman.tgl_pinjam asc");
    $total = mysqli_fetch_assoc($query);
    $pdf->SetFont('Tahoma','',9);
    $pdf->Cell(18,0.6,'Total Buku Yang Sedang Dipinjam:',1,0,'C');

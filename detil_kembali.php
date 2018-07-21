@@ -58,6 +58,9 @@ if(isset($_POST['submit'])) {
 
   $result2 = mysqli_query($koneksi, "INSERT INTO tb_pengembalian(no_pengembalian,no_peminjaman,tgl_kembali) VALUES('$no_pengembalian','$no_peminjaman','$tgl_kembali')");
 
+  $status = '1';
+  $result3 = mysqli_query($koneksi, "UPDATE tb_peminjaman SET status = '$status' WHERE no_peminjaman = '$no_peminjaman'");
+
   $m=0;
   $n=0;
   $q=0;
@@ -109,7 +112,7 @@ if(isset($_POST['submit'])) {
               <th align="center"><center>Judul Buku </center></th>
               <th align="center"><center>Pengarang</center> </th>
               <th align="center"><center>Tanggal Pinjam</center> </th>
-              <th align="center"><center>Jumlah Pinjam</center> </th>
+              <th align="center"><center>Jumlah Kembali</center> </th>
               <th align="center"><center>Keterangan</center> </th>
             </tr>
           </thead>
