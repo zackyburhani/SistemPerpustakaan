@@ -44,7 +44,7 @@ $query = mysqli_query($koneksi,"SELECT tb_pengembalian.no_pengembalian,nama_angg
 
 while ($row = mysqli_fetch_array($query)){
   $pdf->Cell(3,0.5,$row['no_pengembalian'],1,0,'C');
-  $pdf->Cell(5,0.5,$row['nama_anggota'],1,0);
+  $pdf->Cell(5,0.5,$row['nama_anggota'],1,0,'C');
   $pdf->Cell(4,0.5,$row['tgl_kembali'],1,0,'C');
   $pdf->Cell(6,0.5,$row['judul_buku'],1,0,'C'); 
   $pdf->Cell(1.5,0.5,$row['jml_kembali'],1,1,'C'); 

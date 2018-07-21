@@ -7,22 +7,24 @@ include_once("Database/koneksi.php");
 <?php
 
 //autonumber
-$cariindex = mysqli_query($koneksi,"select max(no_pengembalian) from tb_pengembalian") or die(mysqli_error());
+$cariindex = mysqli_query($koneksi,"select max(no_ganti) from tb_gantibuku") or die(mysqli_error());
 $dataindex = mysqli_fetch_array($cariindex);
 if($dataindex){
     $nilaiindex = substr($dataindex[0],3);
     $index = (int) $nilaiindex;
     $index = $index + 1;
-    $hasilindex = "501".str_pad($index,4,"0",STR_PAD_LEFT);
+    $hasilindex = "701".str_pad($index,4,"0",STR_PAD_LEFT);
 
 } else {
-    $hasilindex = "5010001";}
+    $hasilindex = "7010001";}
 
 //insert
 if(isset($_POST['ganti'])) {
   $no_ganti = $_POST['no_ganti'];
   $no_hilang = $_POST['no_hilang'];
   $tgl_ganti = $_POST['tgl_ganti'];
+  $no_hilang = $_POST['no_hilang'];
+  $no_pengembalian = $_POST['no_pengembalian'];
     
   $date = date('Y-m-d');
   if($tgl_ganti < $date){
@@ -31,6 +33,40 @@ if(isset($_POST['ganti'])) {
             window.location.replace('http://localhost/SistemPerpustakaan/belumGanti.php');
           </script>";
   }
+
+  
+  $result3 = mysqli_query($koneksi, "SELECT * FROM detil_kembali,tb_pengembalian,tb_peminjaman,tb_hilang WHERE detil_kembali.no_pengembalian = tb_pengembalian.no_pengembalian AND tb_peminjaman.no_peminjaman = tb_pengembalian.no_peminjaman AND tb_hilang.no_peminjaman = tb_peminjaman.no_peminjaman AND tb_hilang.no_hilang = '$no_hilang' and ket != '' ");
+
+  $result4 = mysqli_query($koneksi, "SELECT jml_hilang FROM detil_hilang WHERE no_hilang = '$no_hilang'");
+  $baris = mysqli_num_rows($result4);
+
+  $result7 = mysqli_query($koneksi, "SELECT * FROM tb_pengembalian,tb_peminjaman,tb_hilang,detil_kembali WHERE tb_peminjaman.no_peminjaman = tb_pengembalian.no_peminjaman AND tb_hilang.no_peminjaman = tb_peminjaman.no_peminjaman AND detil_kembali.no_pengembalian = tb_pengembalian.no_pengembalian AND tb_hilang.no_hilang = '$no_hilang' and ket != '' ");
+
+  $tampung = array();
+  while ($jml = mysqli_fetch_assoc($result3)) {
+    $tampung[] = $jml['jml_kembali'];
+  }
+
+
+
+  $tampung2 = array();
+  while ($jml_hlg = mysqli_fetch_assoc($result4)) {
+    $tampung2[] = $jml_hlg['jml_hilang'];
+  }
+
+  $array = array();
+    while ($data6 = mysqli_fetch_array($result7)){
+      $array[] = $data6['no_copy'];
+  }
+
+  $m=0;
+  $q=0;
+  $a=0;
+  for($i=0; $i<$baris; $i++){
+    $nocop = $array[$a++];
+    $data = $tampung2[$m++]+$tampung[$q++];
+    $update = mysqli_query($koneksi, "UPDATE detil_kembali SET jml_kembali = '$data' WHERE no_pengembalian = '$no_pengembalian' AND no_copy = '$nocop'");
+  }  
 
   $result = mysqli_query($koneksi, "INSERT INTO tb_gantibuku(no_ganti,no_hilang,tgl_ganti) VALUES('$no_ganti','$no_hilang','$tgl_ganti')");
 
@@ -115,6 +151,11 @@ if(isset($_POST['ganti'])) {
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Input Data Penggantian</b></h4>
       </div>
+
+      <?php $q = $data3['no_hilang'] ?>
+      <?php $result4 = mysqli_query($koneksi, "SELECT * FROM tb_pengembalian,tb_peminjaman,tb_hilang,detil_kembali WHERE tb_peminjaman.no_peminjaman = tb_pengembalian.no_peminjaman AND tb_hilang.no_peminjaman = tb_peminjaman.no_peminjaman AND detil_kembali.no_pengembalian = tb_pengembalian.no_pengembalian AND tb_hilang.no_hilang = '$q'"); ?>
+
+      <?php $data5 = mysqli_fetch_array($result4) ?>
       <div class="modal-body">
         <form method="POST" action="belumGanti.php">
         <div class="form-group"><label>Nomor Ganti</label>
@@ -128,6 +169,9 @@ if(isset($_POST['ganti'])) {
         <div class="form-group"><label>Tanggal ganti</label>
             <input required class="form-control required text-capitalize" data-placement="top" data-trigger="manual" type="date" name="tgl_ganti">
           </div>
+
+          <input type="hidden" name="no_pengembalian" value="<?php echo $data5['no_pengembalian'] ?>">
+          <input type="hidden" name="no_hilang" value="<?php echo $q ?>">
 
       </div>
       <div class="modal-footer">
