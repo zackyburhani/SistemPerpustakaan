@@ -89,10 +89,10 @@ if(isset($_POST['submit'])) {
           </script>";
   }
 
-  $result = mysqli_query($koneksi, "SELECT no_anggota FROM tb_anggota");
+  $result = mysqli_query($koneksi, "SELECT no_anggota FROM tb_anggota WHERE no_anggota = '$no_anggota'");
   $anggota = mysqli_fetch_assoc($result);
 
-  if($anggota['no_anggota'] != $no_anggota){
+  if($anggota['no_anggota'] == null){
     echo "<script type='text/javascript'>
             alert ('Data Tidak Ditemukan !');
             window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
@@ -106,12 +106,12 @@ if(isset($_POST['submit'])) {
     $tampung[] = $row['no_copy'];
   }
 
+  $result = mysqli_query($koneksi, "INSERT INTO tb_peminjaman(no_peminjaman,no_anggota,tgl_pinjam) VALUES('$no_peminjaman','$no_anggota','$tgl_pinjam')");
+
   for($i=0; $i<$baris['baris']; $i++){
     $tes = $tampung[$i]; 
-    $update = mysqli_query($koneksi, "UPDATE detil_pinjam set no_peminjaman = '$no_peminjaman' WHERE no_copy = '$tes'"); 
+    $update = mysqli_query($koneksi, "UPDATE detil_pinjam set no_peminjaman = '$no_peminjaman' WHERE no_copy = '$tes' AND no_peminjaman is null"); 
   }
-
-  $result = mysqli_query($koneksi, "INSERT INTO tb_peminjaman(no_peminjaman,no_anggota,tgl_pinjam) VALUES('$no_peminjaman','$no_anggota','$tgl_pinjam')");
     
   if($result){
     echo "<script type='text/javascript'>
@@ -136,12 +136,12 @@ if(isset($_POST['update'])) {
   if($result){
   echo "<script type='text/javascript'>
             alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
           </script>"; 
   } else {
     echo "<script type='text/javascript'>
             alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
           </script>";
   }
 }
@@ -157,89 +157,6 @@ if(isset($_POST['update'])) {
 <section class="content">
 
 <div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="row">
-          <form method="POST" action="peminjaman.php">
-            <div class="col-xs-3">
-              <label style="margin-top: 5px">Cek Status Peminjaman</label>  
-            </div>
-            <div class="col-md-6">
-              <input type="text" name="no_anggota" class="form-control">
-            </div>
-            <div class="col-md-1">
-              <button type="submit" name="cari" class="btn btn-success"><i class="fa fa-search"></i></button>
-            </div>
-          </form>
-        </div>
-      </div>
-     </div>
-    </div>
-  </div>
-
-  <?php 
-  //cari
-  if(isset($_POST['cari'])) {
-    $no_anggota = $_POST['no_anggota'];
-    $result5 = mysqli_query($koneksi, "SELECT * FROM tb_anggota,tb_peminjaman WHERE tb_peminjaman.no_anggota = tb_anggota.no_anggota and tb_anggota.no_anggota = $no_anggota");
-  ?>
-  <div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="row">
-          <?php $hasil = mysqli_fetch_assoc($result5); ?>
-          <div class="col-md-6">
-            <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
-              <tbody>
-                <tr>
-                  <td width="150">Nomor Anggota</td>
-                  <td width="20">:</td>
-                  <td><?php echo $hasil['no_anggota'] ?></td>
-                </tr>
-                <tr>
-                  <td>Nama Anggota</td>
-                  <td>:</td>
-                  <td><?php echo $hasil['nama_anggota'] ?></td>
-                </tr>
-                <tr>
-                  <td>Jabatan</td>
-                  <td>:</td>
-                  <td><?php echo $hasil['jabatan'] ?></td>
-                </tr>
-                <tr>
-                  <td>Nomor Telepon</td>
-                  <td>:</td>
-                  <td><?php echo $hasil['no_telp'] ?></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="col-md-6">
-            <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
-              <tbody>
-                <tr>
-                  <td width="150">Nomor Peminjaman</td>
-                  <td width="20">:</td>
-                  <td><?php echo $hasil['no_peminjaman'] ?></td>
-                </tr>
-                <tr>
-                  <td>Tanggal Pinjam</td>
-                  <td>:</td>
-                  <td><?php echo $hasil['tgl_pinjam'] ?></td>
-                </tr>
-              </tbody>
-            </table>
-            <a href="peminjaman.php" class="btn pull-right col-md-3 btn-danger"><i class="fa fa-close"></i> Batal</a>
-          </div>
-        </div>
-      </div>
-     </div>
-    </div>
-  </div>
-
-<div class="row">
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -280,57 +197,10 @@ if(isset($_POST['update'])) {
     </div>
   </div>
 </div>
-<?php } ?>
 
 <?php $result = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_buku,tb_copybuku WHERE tb_copybuku.no_copy = detil_pinjam.no_copy AND tb_buku.no_buku = tb_copybuku.no_buku AND no_peminjaman is null"); ?>
 <?php $data = mysqli_fetch_array($result); ?> 
 <?php if(isset($data)){ ?>
-
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong>
-          <i class="fa fa-tag"></i>
-          <span> Tambah Pinjaman</span>
-       </strong>
-      </div>
-      <div class="panel-body">
-        <form method="POST" action="peminjaman.php">
-          <div class="form-group">
-            <div class="row">
-              <div class="col-md-1">
-                <label class="control-label">Buku</label>
-              </div>
-              <div class="col-md-4">
-                <select class="form-control" name="no_copy">
-                  <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_copybuku ORDER BY no_copy asc"); ?>
-                  <?php while($buku = mysqli_fetch_array($result)) { ?>
-                  <option value="<?php echo $buku['no_copy'] ?>"><?php echo $buku['no_copy'] ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-              <div class="col-md-1">
-                <label class="control-label">Jumlah</label>
-              </div>
-              <div class="col-md-3">
-                <input type="number" name="jml_pinjam" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" min="1" required class="form-control">
-              </div>
-              <div class="col-md-3">
-                <button type="submit" name="detil" class="btn btn-success btn-md btn-block" ><span class="fa fa-plus"></span> Tambah Buku</button>
-              </div>
-            </div>
-          </div>
-          <hr>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-default">
@@ -407,6 +277,18 @@ if(isset($_POST['update'])) {
           </thead>
           <tbody>
             <?php $no=1; ?>
+            <?php 
+
+            $result = mysqli_query($koneksi, "SELECT * FROM tb_peminjaman,tb_anggota WHERE tb_anggota.no_anggota = tb_peminjaman.no_anggota order by no_peminjaman desc");
+
+            $cek = mysqli_fetch_assoc($result);
+            $no_peminjamans = $cek['no_peminjaman'];
+
+            $result2 = mysqli_query($koneksi, "SELECT no_peminjaman FROM tb_pengembalian WHERE no_peminjaman = '$no_peminjamans'");
+
+            $validasi = mysqli_fetch_assoc($result2);
+            if($validasi == null){
+            ?>
             <?php $result = mysqli_query($koneksi, "SELECT * FROM tb_peminjaman,tb_anggota WHERE tb_anggota.no_anggota = tb_peminjaman.no_anggota order by no_peminjaman desc"); ?>
             <?php while($data2 = mysqli_fetch_array($result)) { ?>
             <tr>
@@ -417,6 +299,7 @@ if(isset($_POST['update'])) {
               <td><center><?php echo $data2['tgl_pinjam'] ?></center></td>
               <td><center><a data-toggle="modal" href="#detail<?php echo $data2['no_peminjaman'] ?>" class="btn btn btn-primary"><i class="fa fa-folder-open"></i></a></center></td>
             </tr>
+            <?php } ?>
             <?php } ?>
           </tbody>
         </table>
@@ -449,7 +332,8 @@ if(isset($_POST['update'])) {
           </thead>
           <tbody>
             <?php $no=1; ?>
-            <?php $result4 = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_anggota,tb_peminjaman,tb_copybuku,tb_buku WHERE detil_pinjam.no_copy = tb_copybuku.no_copy and tb_buku.no_buku = tb_copybuku.no_buku and tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman and tb_peminjaman.no_anggota = tb_anggota.no_anggota order by detil_pinjam.no_peminjaman asc"); ?>
+            <?php $f = $data3['no_peminjaman']; ?>
+            <?php $result4 = mysqli_query($koneksi, "SELECT * FROM detil_pinjam,tb_anggota,tb_peminjaman,tb_copybuku,tb_buku WHERE detil_pinjam.no_copy = tb_copybuku.no_copy and tb_buku.no_buku = tb_copybuku.no_buku and tb_peminjaman.no_peminjaman = detil_pinjam.no_peminjaman and tb_peminjaman.no_anggota = tb_anggota.no_anggota and detil_pinjam.no_peminjaman = '$f' order by detil_pinjam.no_peminjaman asc"); ?>
             <?php while($data2 = mysqli_fetch_array($result4)) { ?>
             <tr>
               <td><center><?php echo $no++ ?></center></td>

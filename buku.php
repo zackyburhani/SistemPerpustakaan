@@ -35,12 +35,12 @@ if(isset($_POST['submit'])) {
   if($result){
   echo "<script type='text/javascript'>
             alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
           </script>"; 
   } else {
     echo "<script type='text/javascript'>
             alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
           </script>";
   }
 }
@@ -61,30 +61,28 @@ if(isset($_POST['update'])) {
   if($result){
   echo "<script type='text/javascript'>
             alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
           </script>"; 
   } else {
     echo "<script type='text/javascript'>
             alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
           </script>";
   }
 }
 
-//update
+//delete
 if(isset($_POST['delete'])) {
   $no_buku = $_POST['no_buku'];
   $result = mysqli_query($koneksi, "DELETE FROM tb_buku WHERE no_buku = $no_buku");
     
   if($result){
   echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
           </script>"; 
   } else {
     echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
           </script>";
   }
 }

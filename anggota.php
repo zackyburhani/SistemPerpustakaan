@@ -18,12 +18,12 @@ if(isset($_POST['submit'])) {
   if($result){
   echo "<script type='text/javascript'>
             alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
           </script>"; 
   } else {
     echo "<script type='text/javascript'>
             alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
           </script>";
   }
 }
@@ -40,30 +40,28 @@ if(isset($_POST['update'])) {
   if($result){
   echo "<script type='text/javascript'>
             alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
           </script>"; 
   } else {
     echo "<script type='text/javascript'>
             alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
           </script>";
   }
 }
 
-//update
+//delete
 if(isset($_POST['delete'])) {
   $no_anggota = $_POST['no_anggota'];
   $result = mysqli_query($koneksi, "DELETE FROM tb_anggota WHERE no_anggota = $no_anggota");
     
   if($result){
   echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
           </script>"; 
   } else {
     echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/copy_buku.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
           </script>";
   }
 }

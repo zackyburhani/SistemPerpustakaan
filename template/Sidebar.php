@@ -9,7 +9,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header"><center><b> PERPUSTAKAAN SMAN 108</b></center></li>
         <li>
-          <a href="index.php">
+          <a href="dashboard.php">
             <i class="fa fa-home"></i> <span>Home</span>
           </a>
         </li>
@@ -50,7 +50,7 @@
           </a>
           <ul class="treeview-menu">
             <li>
-              <a href="peminjaman.php">
+              <a href="daftarKunjungan.php">
                 <i class="fa fa-circle-o"></i> <span>Daftar Kunjungan</span>
               </a>
             </li>
@@ -65,15 +65,15 @@
               </a>
             </li>
             <li>
-              <a href="">
-                <i class="fa fa-circle-o"></i> <span>Daftar Belum Ganti Buku</span>
+              <a href="belumGanti.php">
+                <i class="fa fa-circle-o"></i> <span>Daftar Penggantian Buku</span>
               </a>
             </li>
-            <li>
+            <!-- <li>
               <a href="">
                 <i class="fa fa-circle-o"></i> <span>Daftar Sudah Ganti Buku</span>
               </a>
-            </li>
+            </li> -->
           </ul>
         </li>
 
@@ -87,26 +87,37 @@
           </a>
           <ul class="treeview-menu">
             <li>
-              <a href="">
-                <i class="fa fa-circle-o"></i> <span>Pengembalian Buku</span>
-              </a>
-            </li>
-            <li>
-              <a href="">
+              <a href="lapPinjamBuku.php">
                 <i class="fa fa-circle-o"></i> <span>Peminjaman Buku</span>
               </a>
             </li>
             <li>
-              <a href="">
-                <i class="fa fa-circle-o"></i> <span>Anggota Belum Ganti Buku</span>
+              <a href="lapPengembalianBuku.php">
+                <i class="fa fa-circle-o"></i> <span>Pengembalian Buku</span>
+              </a>
+            </li>
+            <li>
+              <a href="lapHilangBuku.php">
+                <i class="fa fa-circle-o"></i> <span>Buku Hilang</span>
               </a>
             </li>
             <li>
               <a href="">
-                <i class="fa fa-circle-o"></i> <span>Anggota Sudah Ganti Buku</span>
+                <i class="fa fa-circle-o"></i> <span>Ganti Buku</span>
+              </a>
+            </li>
+            <li>
+              <a href="lapKunjungan.php">
+                <i class="fa fa-circle-o"></i> <span>Laporan Kunjungan</span>
               </a>
             </li>
           </ul>
+        </li>
+
+        <li>
+          <a href="logout.php">
+            <i class="fa fa-sign-out"></i> <span>Logout</span>
+          </a>
         </li>
 
       </ul>
