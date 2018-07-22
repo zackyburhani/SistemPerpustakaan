@@ -62,10 +62,12 @@ if($dataindex){
 
               <?php $r = $data2['no_peminjaman']; ?>
               <?php $result6 = mysqli_query($koneksi, "SELECT no_peminjaman FROM tb_pengembalian WHERE no_peminjaman = '$r'"); 
+              $result7 = mysqli_query($koneksi, "SELECT status FROM tb_peminjaman WHERE no_peminjaman = '$r'"); 
               
-              $validasi = mysqli_fetch_assoc($result6); ?>
-              
-              <?php if($validasi['no_peminjaman'] == null){ ?>
+              $validasi4 = mysqli_fetch_assoc($result7);
+
+              $validasi = mysqli_fetch_assoc($result6); ?>              
+              <?php if($validasi['no_peminjaman'] == null && $validasi4['status'] == 0){ ?>
                 <td><center><a href="detil_kembali.php?id=<?php echo $data2['no_peminjaman'] ?>" class="btn btn-success"><i class="fa fa-check"></i></a></center></td>
               <?php } else { ?>
                 <td><center><b>-</b></center></td>

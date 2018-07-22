@@ -98,7 +98,9 @@ if($dataindex){
       </div>
       <div class="panel-footer">
         <div class="row">
-          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <a href="pengembalian.php" class="btn pull-right col-md-5 btn-danger"><i class="fa fa-close"></i> Kembali</a>
+          </div>
         <div class="col-md-6">
           <button type="button" data-target="#ModalEntryPenggantian" data-toggle="modal" class="btn btn-primary btn-md btn-block" ><span class="fa fa-sign-out"></span> Proses Pengembalian</button>
         </div>

@@ -107,6 +107,7 @@ if($dataindex){
           </div>
 
           <input type="hidden" name="no_pengembalian" value="<?php echo $data5['no_pengembalian'] ?>">
+          <input type="hidden" name="no_peminjaman" value="<?php echo $data3['no_peminjaman'] ?>">
           <input type="hidden" name="no_hilang" value="<?php echo $q ?>">
 
       </div>

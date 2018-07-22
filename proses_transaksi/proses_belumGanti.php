@@ -8,7 +8,8 @@ if(isset($_POST['ganti'])) {
   $tgl_ganti = $_POST['tgl_ganti'];
   $no_hilang = $_POST['no_hilang'];
   $no_pengembalian = $_POST['no_pengembalian'];
-    
+  $no_peminjaman = $_POST['no_peminjaman'];
+
   $date = date('Y-m-d');
   if($tgl_ganti < $date){
     echo $s = "<script type='text/javascript'>
@@ -31,8 +32,6 @@ if(isset($_POST['ganti'])) {
     $tampung[] = $jml['jml_kembali'];
   }
 
-
-
   $tampung2 = array();
   while ($jml_hlg = mysqli_fetch_assoc($result4)) {
     $tampung2[] = $jml_hlg['jml_hilang'];
@@ -42,6 +41,7 @@ if(isset($_POST['ganti'])) {
     while ($data6 = mysqli_fetch_array($result7)){
       $array[] = $data6['no_copy'];
   }
+
 
   $m=0;
   $q=0;
@@ -56,6 +56,7 @@ if(isset($_POST['ganti'])) {
 
   $status = '1';
   $result4 = mysqli_query($koneksi, "UPDATE tb_hilang SET status = '$status' WHERE no_hilang = '$no_hilang'");
+  $result4 = mysqli_query($koneksi, "UPDATE tb_peminjaman SET status = '$status' WHERE no_peminjaman = '$no_peminjaman'");
 
   if($result){
     // echo "<script type='text/javascript'>
