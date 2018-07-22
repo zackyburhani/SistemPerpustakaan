@@ -18,64 +18,6 @@ if($dataindex){
 } else {
     $hasilindex = "4010001";}
 
-//insert
-if(isset($_POST['submit'])) {
-  $no_pengembalian = $_POST['no_pengembalian'];
-  $no_peminjaman = $_POST['no_peminjaman'];
-  $tgl_kembali = $_POST['tgl_kembali'];
-    
-  $date = date('Y-m-d');
-  if($tgl_kembali < $date){
-    echo "<script type='text/javascript'>
-            alert ('Tanggal Tidak Valid !');
-            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
-          </script>";
-  }
-
-  $result = mysqli_query($koneksi, "INSERT INTO tb_pengembalian(no_pengembalian,no_peminjaman,tgl_kembali) VALUES('$no_pengembalian','$no_peminjaman','$tgl_kembali')");
-
-  if($result){
-    echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
-          </script>";
-  }
-}
-
-//insert
-if(isset($_POST['hilang'])) {
-  $no_hilang = $_POST['no_hilang'];
-  $no_peminjaman = $_POST['no_peminjaman'];
-  $tgl_hilang = $_POST['tgl_hilang'];
-    
-  $date = date('Y-m-d');
-  if($tgl_hilang < $date){
-    echo "<script type='text/javascript'>
-            alert ('Tanggal Tidak Valid !');
-            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
-          </script>";
-  }
-
-  $result = mysqli_query($koneksi, "INSERT INTO tb_hilang(no_hilang,no_peminjaman,tgl_hilang) VALUES('$no_hilang','$no_peminjaman','$tgl_hilang')");
-
-  if($result){
-    echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
-          </script>";
-  }
-}
-
 ?>
 
 <div class="content-wrapper">
@@ -202,7 +144,7 @@ if(isset($_POST['hilang'])) {
           <h4 class="modal-title" id="myModalLabel">Input Data Pengembalian</b></h4>
       </div>
       <div class="modal-body">
-        <form method="POST" action="pengembalian.php">
+        <form method="POST" action="proses_transaksi/proses_pengembalian.php">
         <div class="form-group"><label>Nomor Pengembalian</label>
             <input required class="form-control required text-capitalize" placeholder="Input Nama Anggota" value="<?php echo $hasilindex ?>" data-placement="top" readonly data-trigger="manual" type="text" name="no_pengembalian">
           </div>

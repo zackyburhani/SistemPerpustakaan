@@ -4,25 +4,6 @@ include 'template/Sidebar.php';
 include_once("Database/koneksi.php");
 ?>
 
-<?php
-
-if(isset($_POST['delete'])) {
-  $no_kunjungan = $_POST['no_kunjungan'];
-  $result = mysqli_query($koneksi, "DELETE FROM tb_kunjungan WHERE no_kunjungan = $no_kunjungan");
-    
-  if($result){
-  echo "<script type='text/javascript'>
-            window.location.replace('http://localhost/SistemPerpustakaan/daftarKunjungan.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            window.location.replace('http://localhost/SistemPerpustakaan/daftarKunjungan.php');
-          </script>";
-  }
-}
-
-?>
-
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
@@ -85,7 +66,7 @@ if(isset($_POST['delete'])) {
       <div class='modal-body'>Anda yakin ingin menghapus ?
       </div>
       <div class='modal-footer'>
-        <form class="" action="daftarKunjungan.php" method="post">
+        <form class="" action="proses_transaksi/proses_daftarKunjungan.php" method="post">
           <input type="hidden" value="<?php echo $data['no_kunjungan'] ?>" name="no_kunjungan">
           <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Batal</button>
           <button class="btn btn-danger" aria-label="Delete" type="submit" name="delete"><i class="fa fa-trash fa-fw"></i> Hapus</button>

@@ -4,70 +4,6 @@ include 'template/Sidebar.php';
 include_once("Database/koneksi.php");
 ?>
 
-<?php
-
-//insert
-if(isset($_POST['submit'])) {
-  $no_anggota = $_POST['no_anggota'];
-  $nama_anggota = $_POST['nama_anggota'];
-  $jabatan = $_POST['jabatan'];
-  $no_telp = $_POST['no_telp'];
-
-  $result = mysqli_query($koneksi, "INSERT INTO tb_anggota(no_anggota,nama_anggota,jabatan,no_telp) VALUES('$no_anggota','$nama_anggota','$jabatan','$no_telp')");
-    
-  if($result){
-  echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
-          </script>";
-  }
-}
-
-//update
-if(isset($_POST['update'])) {
-  $no_anggota = $_POST['no_anggota'];
-  $nama_anggota = $_POST['nama_anggota'];
-  $jabatan = $_POST['jabatan'];
-  $no_telp = $_POST['no_telp'];
-
-  $result = mysqli_query($koneksi, "UPDATE tb_anggota SET nama_anggota = '$nama_anggota',jabatan = '$jabatan', no_telp = '$no_telp' WHERE no_anggota = $no_anggota");
-    
-  if($result){
-  echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
-          </script>";
-  }
-}
-
-//delete
-if(isset($_POST['delete'])) {
-  $no_anggota = $_POST['no_anggota'];
-  $result = mysqli_query($koneksi, "DELETE FROM tb_anggota WHERE no_anggota = $no_anggota");
-    
-  if($result){
-  echo "<script type='text/javascript'>
-            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            window.location.replace('http://localhost/SistemPerpustakaan/anggota.php');
-          </script>";
-  }
-}
-
-?>
-
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
@@ -101,7 +37,7 @@ if(isset($_POST['delete'])) {
             <?php while($data = mysqli_fetch_array($result)) { ?>
             <tr>
               <td><center><?php echo $no++; ?></center></td>
-              <td><?php echo $data['no_anggota'] ?></td>
+              <td><center><?php echo $data['no_anggota'] ?></center></td>
               <td><center><?php echo $data['nama_anggota'] ?></center></td>
               <td><center><?php echo $data['jabatan'] ?></center></td>
               <td><center><?php echo $data['no_telp'] ?></center></td> 
@@ -129,7 +65,7 @@ if(isset($_POST['delete'])) {
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Input Data Anggota</h4>
       </div>
-      <form method="POST" action="anggota.php" enctype="multipart/form-data">
+      <form method="POST" action="proses_master/proses_anggota.php" enctype="multipart/form-data">
         <div class="modal-body">
           
           <div class="form-group"><label>Nomor Anggota</label>
@@ -172,7 +108,7 @@ if(isset($_POST['delete'])) {
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Ubah Data Anggota</h4>
       </div>
-      <form method="POST" action="anggota.php" enctype="multipart/form-data">
+      <form method="POST" action="proses_master/proses_anggota.php" enctype="multipart/form-data">
         <div class="modal-body">
           
           <div class="form-group"><label>Nomor Anggota</label>
@@ -220,7 +156,7 @@ if(isset($_POST['delete'])) {
       <div class='modal-body'>Anda yakin ingin menghapus ?
       </div>
       <div class='modal-footer'>
-        <form class="" action="anggota.php" method="post">
+        <form class="" action="proses_master/proses_anggota.php" method="post">
           <input type="hidden" value="<?php echo $data['no_anggota'] ?>" name="no_anggota">
           <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Batal</button>
           <button class="btn btn-danger" aria-label="Delete" type="submit" name="delete"><i class="fa fa-trash fa-fw"></i> Hapus</button>

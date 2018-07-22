@@ -18,75 +18,6 @@ if($dataindex){
 } else {
     $hasilindex = "2010001";}
 
-
-//insert
-if(isset($_POST['submit'])) {
-  $no_buku = $_POST['no_buku'];
-  $judul_buku = $_POST['judul_buku'];
-  $pengarang = $_POST['pengarang'];
-  $penerbit = $_POST['penerbit'];
-  $thn_terbit = $_POST['thn_terbit'];
-  $thn_beli = $_POST['thn_beli'];
-  $asal_buku = $_POST['asal_buku'];
-  $eks = $_POST['eks'];
-
-  $result = mysqli_query($koneksi, "INSERT INTO tb_buku(no_buku,judul_buku,pengarang,penerbit,thn_terbit,thn_beli,asal_buku,eks) VALUES('$no_buku','$judul_buku','$pengarang','$penerbit','$thn_terbit','$thn_beli','$asal_buku','$eks')");
-    
-  if($result){
-  echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
-          </script>";
-  }
-}
-
-//update
-if(isset($_POST['update'])) {
-  $no_buku = $_POST['no_buku'];
-  $judul_buku = $_POST['judul_buku'];
-  $pengarang = $_POST['pengarang'];
-  $penerbit = $_POST['penerbit'];
-  $thn_terbit = $_POST['thn_terbit'];
-  $thn_beli = $_POST['thn_beli'];
-  $asal_buku = $_POST['asal_buku'];
-  $eks = $_POST['eks'];
-
-  $result = mysqli_query($koneksi, "UPDATE tb_buku SET judul_buku = '$judul_buku',pengarang = '$pengarang', penerbit = '$penerbit',thn_terbit = '$thn_terbit',thn_beli = '$thn_beli',asal_buku = '$asal_buku',eks = '$eks' WHERE no_buku = $no_buku");
-    
-  if($result){
-  echo "<script type='text/javascript'>
-            alert ('Data Berhasil Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            alert ('Data Gagal Disimpan !');
-            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
-          </script>";
-  }
-}
-
-//delete
-if(isset($_POST['delete'])) {
-  $no_buku = $_POST['no_buku'];
-  $result = mysqli_query($koneksi, "DELETE FROM tb_buku WHERE no_buku = $no_buku");
-    
-  if($result){
-  echo "<script type='text/javascript'>
-            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
-          </script>"; 
-  } else {
-    echo "<script type='text/javascript'>
-            window.location.replace('http://localhost/SistemPerpustakaan/buku.php');
-          </script>";
-  }
-}
-
 ?>
 
 <div class="content-wrapper">
@@ -158,7 +89,7 @@ if(isset($_POST['delete'])) {
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Input Data Buku</h4>
       </div>
-      <form method="POST" action="buku.php" enctype="multipart/form-data">
+      <form method="POST" action="proses_master/proses_buku.php" enctype="multipart/form-data">
         <div class="modal-body">
           
           <div class="form-group"><label>Nomor Buku</label>
@@ -212,7 +143,7 @@ if(isset($_POST['delete'])) {
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Update Data Buku</h4>
       </div>
-      <form method="POST" action="buku.php" enctype="multipart/form-data">
+      <form method="POST" action="proses_master/proses_buku.php" enctype="multipart/form-data">
         <div class="modal-body">
           
           <div class="form-group"><label>Nomor Buku</label>
@@ -271,7 +202,7 @@ if(isset($_POST['delete'])) {
       <div class='modal-body'>Anda yakin ingin menghapus ?
       </div>
       <div class='modal-footer'>
-        <form class="" action="buku.php" method="post">
+        <form class="" action="proses_master/proses_buku.php" method="post">
           <input type="hidden" value="<?php echo $data['no_buku'] ?>" name="no_buku">
           <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Batal</button>
           <button class="btn btn-danger" aria-label="Delete" type="submit" name="delete"><i class="fa fa-trash fa-fw"></i> Hapus</button>
