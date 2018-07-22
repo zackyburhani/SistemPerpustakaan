@@ -1,3 +1,10 @@
+<?php 
+
+session_start();
+session_destroy();
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,7 +81,7 @@
               </div>
               <div class="col-md-4">
                 <!-- small box -->
-                <div class="small-box bg-red">
+                <div class="small-box bg-yellow">
                   <div class="inner" style="padding-bottom: 45px">
                     <h3>Katalog Buku</h3>
                   </div>

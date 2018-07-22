@@ -28,7 +28,7 @@ if(isset($_POST['submit'])) {
   if($tgl_kembali < $date){
     echo "<script type='text/javascript'>
             alert ('Tanggal Tidak Valid !');
-            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
           </script>";
   }
 
@@ -242,7 +242,7 @@ if(isset($_POST['hilang'])) {
           <thead>
             <tr>
               <th align="center" width="50px">No. </th>
-              <th align="center"><center>Nomor Peminjaman</center></th>
+              <th align="center"><center>Nomor Copy</center></th>
               <th align="center"><center>Judul Buku </center></th>
               <th align="center"><center>Pengarang</center> </th>
               <th align="center"><center>Tanggal Pinjam</center> </th>

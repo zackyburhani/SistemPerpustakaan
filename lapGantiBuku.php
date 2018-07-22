@@ -7,7 +7,7 @@ include_once("Database/koneksi.php");
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
-      <small><b>Halaman Laporan Peminjaman Buku</b></small>
+      <small><b>Halaman Laporan Penggantian Buku</b></small>
     </h1>
   </section>
 <section class="content">
@@ -16,13 +16,13 @@ include_once("Database/koneksi.php");
     <div class="col-lg-12">
       <div class="box box-success">
         <div class="box-header with-border">
-          <h3 class="box-title"><i class="fa fa-file-text fa-fw"></i> Laporan Peminjaman Buku</h3>
+          <h3 class="box-title"><i class="fa fa-file-text fa-fw"></i> Laporan Penggantian Buku</h3>
         </div>
 
         <div class="box-body">
           <div class="form-group">
-            <form action="laporan/proses_lapPinjamBuku.php" method="POST">
-              
+            <form action="laporan/proses_lapGantiBuku.php" method="POST">
+
               <div class="row" style="margin-bottom: 20px">
                 <div class="col-md-6 col-md-offset-2">
                   <label class="col-sm-2 control-label" style="margin-top: 5px">Dari : </label>
@@ -50,7 +50,7 @@ include_once("Database/koneksi.php");
                   </div>
                 </div>
               </div>
-              
+
               </form>
           </div>
         </div>

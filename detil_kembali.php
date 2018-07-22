@@ -1,7 +1,8 @@
 <?php 
 include 'template/Header.php'; 
 include 'template/Sidebar.php';
-include_once("Database/koneksi.php");
+include_once("Database/koneksi.php"); 
+error_reporting(0);
 ?>
 
 <?php
@@ -31,7 +32,7 @@ if(isset($_POST['submit'])) {
   if($tgl_kembali < $date){
     echo "<script type='text/javascript'>
             alert ('Tanggal Tidak Valid !');
-            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
           </script>";
   }
 
@@ -41,7 +42,7 @@ if(isset($_POST['submit'])) {
   $ktr = "ket";
   $keterangan = array();
   for($i=1; $i<=$baris; $i++){
-    $keterangan[] = $_POST[$ktr.$i];
+      $keterangan[] = $_POST[$ktr.$i];
   }
 
   $jml = "jml_pinjam";
@@ -100,7 +101,7 @@ if(isset($_POST['submit'])) {
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <label>Daftar Hilang</label>
+        <label>Daftar Pengembalian</label>
       </div>
       <div class="panel-body">
         <form method="POST" action="detil_kembali.php?id=<?php echo $id ?>">
@@ -108,12 +109,12 @@ if(isset($_POST['submit'])) {
           <thead>
             <tr>
               <th align="center" width="20px">No. </th>
-              <th align="center"><center>Nomor Peminjaman</center></th>
+              <th align="center"><center>Nomor Copy</center></th>
               <th align="center"><center>Judul Buku </center></th>
               <th align="center"><center>Pengarang</center> </th>
               <th align="center"><center>Tanggal Pinjam</center> </th>
               <th align="center"><center>Jumlah Kembali</center> </th>
-              <th align="center"><center>Keterangan</center> </th>
+              <th align="center" width="100px"><center>Keterangan</center> </th>
             </tr>
           </thead>
           <tbody>
@@ -125,13 +126,14 @@ if(isset($_POST['submit'])) {
             <?php while($data2 = mysqli_fetch_array($result)) { ?>
             <tr>
               <td><center><?php echo $no++ ?></center></td>
-              <td><center><?php echo $data2['no_peminjaman'] ?></center></td>
+              <td><center><?php echo $data2['no_copy'] ?></center></td>
               <td><center><?php echo $data2['judul_buku'] ?></center></td>
               <td><center><?php echo $data2['pengarang'] ?></center></td>
               <td><center><?php echo $data2['tgl_pinjam'] ?></center></td>
               <input type="hidden" name="no_copy<?php echo $nocop++ ?>" value="<?php echo $data2['no_copy'] ?>">
               <td><center><input class="form-control" type="text" value="<?php echo $data2['jml_pinjam'] ?>" name="jml_pinjam<?php echo $pinjem++; ?>"></center></td>
-              <td><center><input class="form-control" type="text" name="ket<?php echo $keter++ ?>"></center></td>
+
+              <td><center><input type="checkbox" name="ket<?php echo $keter++; ?>" value="hilang"></center></td>
             </tr>
             <?php } ?>
           </tbody>

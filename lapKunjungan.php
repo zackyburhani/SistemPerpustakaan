@@ -46,7 +46,7 @@ include_once("Database/koneksi.php");
                     <button type="submit" name="cetak" class="btn btn-block btn-danger"><i class="fa fa-file-pdf-o"></i> Cetak</button>
                   </div>
                   <div class="col-sm-5">
-                    <button type="submit" name="cetak" class="btn btn-block btn-default"><i class="fa fa-close"></i> Batal</button>
+                    <a href="dashboard.php"  class="btn btn-block btn-default"><i class="fa fa-close"></i> Batal</a>
                   </div>
                 </div>
               </div>

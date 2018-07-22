@@ -1,10 +1,11 @@
   <aside class="main-sidebar">
     <section class="sidebar">
 
+      <div class="user-panel">
         <center>
-          <img src="assets/img/logo.png" style="width: 120px">
+          <img src="assets/img/logo.png" style="background-color: white; padding: 10px 15px 10px 15px;" width="150px" class="img-circle" alt="User Image">
         </center>
-
+      </div>
 
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header"><center><b> PERPUSTAKAAN SMAN 108</b></center></li>
@@ -69,11 +70,6 @@
                 <i class="fa fa-circle-o"></i> <span>Daftar Penggantian Buku</span>
               </a>
             </li>
-            <!-- <li>
-              <a href="">
-                <i class="fa fa-circle-o"></i> <span>Daftar Sudah Ganti Buku</span>
-              </a>
-            </li> -->
           </ul>
         </li>
 
@@ -102,7 +98,7 @@
               </a>
             </li>
             <li>
-              <a href="">
+              <a href="lapGantiBuku.php">
                 <i class="fa fa-circle-o"></i> <span>Ganti Buku</span>
               </a>
             </li>

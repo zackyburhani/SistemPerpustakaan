@@ -35,7 +35,7 @@ if(isset($_POST['hilang'])) {
 }
 
 //autonumber
-$cariindex = mysqli_query($koneksi,"select max(no_pengembalian) from tb_pengembalian") or die(mysqli_error());
+$cariindex = mysqli_query($koneksi,"select max(no_hilang) from tb_hilang") or die(mysqli_error());
 $dataindex = mysqli_fetch_array($cariindex);
 if($dataindex){
     $nilaiindex = substr($dataindex[0],3);
@@ -58,7 +58,7 @@ if(isset($_POST['submit'])) {
   if($tgl_hilang < $date){
     echo "<script type='text/javascript'>
             alert ('Tanggal Tidak Valid !');
-            window.location.replace('http://localhost/SistemPerpustakaan/peminjaman.php');
+            window.location.replace('http://localhost/SistemPerpustakaan/pengembalian.php');
           </script>";
   }
 
@@ -74,7 +74,8 @@ if(isset($_POST['submit'])) {
     $jml_ganti[] = $_POST[$jml.$i];
   }
 
-  $result2 = mysqli_query($koneksi, "INSERT INTO tb_hilang(no_hilang,no_peminjaman,tgl_hilang) VALUES('$no_hilang','$no_peminjaman','$tgl_hilang')");
+  $status = '0';
+  $result2 = mysqli_query($koneksi, "INSERT INTO tb_hilang(no_hilang,no_peminjaman,tgl_hilang,status) VALUES('$no_hilang','$no_peminjaman','$tgl_hilang','$status')");
 
   $m=0;
   $n=0;

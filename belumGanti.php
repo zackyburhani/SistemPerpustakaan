@@ -70,6 +70,9 @@ if(isset($_POST['ganti'])) {
 
   $result = mysqli_query($koneksi, "INSERT INTO tb_gantibuku(no_ganti,no_hilang,tgl_ganti) VALUES('$no_ganti','$no_hilang','$tgl_ganti')");
 
+  $status = '1';
+  $result4 = mysqli_query($koneksi, "UPDATE tb_hilang SET status = '$status' WHERE no_hilang = '$no_hilang'");
+
   if($result){
     echo "<script type='text/javascript'>
             alert ('Data Berhasil Disimpan !');

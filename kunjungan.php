@@ -1,3 +1,10 @@
+<?php 
+
+session_start();
+session_destroy();
+
+?>
+
 <?php
 
 include_once("Database/koneksi.php");

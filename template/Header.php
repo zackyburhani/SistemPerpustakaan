@@ -38,7 +38,7 @@
 
   <link rel="SHORTCUT ICON" href="assets/img/logo.png">
 </head>
-<body class="hold-transition skin-green-light sidebar-mini">
+<body class="hold-transition skin-green sidebar-mini">
 <div class="wrapper">
 
   <header class="main-header">
@@ -67,3 +67,12 @@
       </div>
     </nav>
   </header>
+
+<?php session_start(); ?>
+<?php 
+
+if($_SESSION['username'] == null) {
+  header("location:login.php");
+}
+
+?>

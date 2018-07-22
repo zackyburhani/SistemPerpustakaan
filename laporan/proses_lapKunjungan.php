@@ -60,7 +60,7 @@ $pdf->Cell(16.4,1,'Mengetahui,',0,1,'R');
 $pdf->Cell(18,0.1,'Kepala Perpustakaan SMAN 108',0,1,'R');
 $pdf->Cell(17,7.5,'Tiurma Sirait, S.Pd',0,1,'R');
 
-$pdf->Output('I','Kunjungan.pdf');
+$pdf->Output('I','Laporan_Kunjungan.pdf');
 
 }
 ?>

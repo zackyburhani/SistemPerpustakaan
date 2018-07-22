@@ -29,11 +29,11 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background-color: #999999">
 <div class="login-box" style="margin-top: 70px">
-  <center><h3><b>Selamat Datang Di Menu Admin</b></h3></center>
-  <center><h3><b>Silahkan Login</b></h3></center>
-  <center><h3><b></b></h3></center>
+  <center><h3 style="color: white"><b>Selamat Datang Di Menu Admin</b></h3></center>
+  <center><h3 style="color: white"><b>Silahkan Login</b></h3></center>
+  <center><h3><b><hr></b></h3></center>
   <!-- /.login-logo -->
   <div class="login-box-body">
     <center> 
@@ -78,23 +78,21 @@
 
 
 <?php
+session_start();
 
-if(isset($_SESSION)) {
-  if($_SESSION != null){
+if(isset($_SESSION['username'])) {
+  if($_SESSION['username'] != null){
     header("location:dashboard.php");
   }
 }
 
 if(isset($_POST['login'])) {    
 
-  // ob_start();
-  session_start();
-  // ob_end_clean();
   $username=$_POST["username"];
   $password=$_POST["password"];
     
     if($username=="admin" AND $password=="admin")
-    {
+    {   
         $_SESSION['username'] = $username;
         header("location:dashboard.php"); 
     }else{
@@ -103,6 +101,8 @@ if(isset($_POST['login'])) {
             window.location.replace('http://localhost/SistemPerpustakaan/login.php');
           </script>"; 
     }
-} 
+
+}
+
 
 ?>
